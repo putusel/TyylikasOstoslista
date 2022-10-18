@@ -50,6 +50,16 @@ const saveItem = () => {
     )    
   }
 
+  const renderItem = ({ item }) => (
+    <ListItem bottomDivider>
+      <ListItem.Content>
+        <ListItem.Title>{item.product}</ListItem.Title>
+        <ListItem.Subtitle>{item.amount}</ListItem.Subtitle>
+      </ListItem.Content>
+      <Icon type="material" color="red" name="delete" onPress={() => deleteItem(item.id)} />
+    </ListItem>
+    )
+
   const listSeparator = () => {
     return (
       <View
@@ -63,6 +73,8 @@ const saveItem = () => {
     );
   };
 
+  
+
   return (
     <View style={styles.container}>
       <Header  
@@ -71,34 +83,40 @@ const saveItem = () => {
         rightComponent={{ icon: 'home' }}
       />
       
-      <Input   placeholder='Product' label='PRODUCT'  
-      onChangeText={(product) => setProduct(product)}
-      value={product}
+      <Input   
+        placeholder='Product' 
+        label='PRODUCT'  
+        onChangeText={(product) => setProduct(product)}
+        value={product}
       />
-      <Input   placeholder='Amount' label='AMOUNT'  
-      onChangeText={(amount) => setAmount(amount)}
-      value={amount}
+      <Input   
+        placeholder='Amount' 
+        label='AMOUNT'  
+        onChangeText={(amount) => setAmount(amount)}
+        value={amount}
       />
-      <Button raised icon={{name: 'save'}} onPress={saveItem}title="SAVE" />
-      <FlatList 
-        style={{marginLeft : "5%"}}
-        keyExtractor={item => item.id.toString()} 
-        renderItem={({item}) => <View style={styles.listcontainer}><Text style={{fontSize: 18}}>{item.product}, {item.amount}</Text>
-        <Icon type="material" reverse color="red" name="delete" onPress={() => deleteItem(item.id)} /></View>} 
-        
-        data={products} 
+      <Button raised icon={{name: 'save'}} 
+        onPress={saveItem}
+        title="SAVE" 
+      />
+      <FlatList  
+        data={products}  
+        renderItem={renderItem}  
+        keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={listSeparator} 
-      />
+      /> 
       <StatusBar style="auto" />
     </View>
-  );
+      
+        
+    );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+   flex: 1,
+   backgroundColor: '#fff',
+   alignItems: 'center',
+   justifyContent: 'center',
   },
 });
