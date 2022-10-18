@@ -11,28 +11,27 @@ const db = SQLite.openDatabase('shoppinglistdb.db');
 /*const db = SQLite.openDatabase('coursedb.db');*/
 
 export default function App() {
-
   const [amount, setAmount] = useState('');
   const [product, setProduct] = useState('');
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    db.transaction(tx => {
-      tx.executeSql('create table if not exists products (id integer primary key not null, amount text, product text);');
-    }, null, updateList); 
+  useEffect(() => {  
+    db.transaction(tx => {    
+      tx.executeSql('create table if not exists shoppinglist (id integer primary key not null, amount text, product text);');  
+    }, null, updateList);
   }, []);
 
-// Save product
-const saveItem = () => {
-  db.transaction(tx => {
+  // Save product
+  const saveItem = () => {
+    db.transaction(tx => {
       tx.executeSql('insert into products (amount, product) values (?, ?);', [amount, product]);    
     }, null, updateList
-    
   )
   setAmount('');
   setProduct('');
 }
-// Update shoppinglist
+
+  // Update shoppinglist
   const updateList = () => {
     db.transaction(tx => {
       tx.executeSql('select * from products;', [], (_, { rows }) =>
@@ -50,30 +49,28 @@ const saveItem = () => {
     )    
   }
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({item}) => (
     <ListItem bottomDivider>
       <ListItem.Content>
         <ListItem.Title>{item.product}</ListItem.Title>
-        <ListItem.Subtitle>{item.amount}</ListItem.Subtitle>
+          <ListItem.Subtitle>{item.amount}</ListItem.Subtitle>
       </ListItem.Content>
-      <Icon type="material" color="red" name="delete" onPress={() => deleteItem(item.id)} />
+      <Icon type='material' name='delete' color='red' onPress={ () => deleteItem(item.id)} />
     </ListItem>
-    )
+  )
 
   const listSeparator = () => {
     return (
-      <View
+      <View 
         style={{
           height: 5,
-          width: "80%",
-          backgroundColor: "#fff",
-          marginLeft: "10%"
-        }}
+          width: '80%',
+          backgroundColor: '#fff',
+          marginLeft: '10%'
+        }} 
       />
     );
-  };
-
-  
+  }; 
 
   return (
     <View style={styles.container}>
@@ -82,7 +79,6 @@ const saveItem = () => {
         centerComponent={{ text: 'SHOPPING LIST' }}  
         rightComponent={{ icon: 'home' }}
       />
-      
       <Input   
         placeholder='Product' 
         label='PRODUCT'  
@@ -107,16 +103,15 @@ const saveItem = () => {
       /> 
       <StatusBar style="auto" />
     </View>
-      
-        
+          
     );
 }
 
 const styles = StyleSheet.create({
   container: {
-   flex: 1,
-   backgroundColor: '#fff',
-   alignItems: 'center',
-   justifyContent: 'center',
-  },
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+   }
 });
