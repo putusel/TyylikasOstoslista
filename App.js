@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, FlatList, View, Text } from 'react-native';
 import { Header } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
 import { Input, Button } from 'react-native-elements';
@@ -70,7 +70,7 @@ const saveItem = () => {
         centerComponent={{ text: 'SHOPPING LIST' }}  
         rightComponent={{ icon: 'home' }}
       />
-      <Icon type="material" name="alarm" />
+      
       <Input   placeholder='Product' label='PRODUCT'  
       onChangeText={(product) => setProduct(product)}
       value={product}
@@ -80,14 +80,15 @@ const saveItem = () => {
       value={amount}
       />
       <Button raised icon={{name: 'save'}} onPress={saveItem}title="SAVE" />
-      renderItem = ({ item }) => (
-        <ListItem bottomDivider>
-          <ListItem.Content>
-            <ListItem.Title>{item.description}</ListItem.Title>
-            <ListItem.Subtitle>{item.amount}</ListItem.Subtitle>
-          </ListItem.Content>
-        </ListItem>
-        )
+      <FlatList 
+        style={{marginLeft : "5%"}}
+        keyExtractor={item => item.id.toString()} 
+        renderItem={({item}) => <View style={styles.listcontainer}><Text style={{fontSize: 18}}>{item.product}, {item.amount}</Text>
+        <Icon type="material" reverse color="red" name="delete" onPress={() => deleteItem(item.id)} /></View>} 
+        
+        data={products} 
+        ItemSeparatorComponent={listSeparator} 
+      />
       <StatusBar style="auto" />
     </View>
   );
